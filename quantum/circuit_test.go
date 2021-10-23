@@ -4,14 +4,26 @@ import (
 	"testing"
 )
 
-func TestMakeCircuit(t *testing.T) {
-	qubit2d, err := MakeQubit(0.5, 0.5, 0.5, 0.5)
+func TestMakeCircuit1Qubit1Size(t *testing.T) {
+	qubit, err := MakeQubit(1, 0)
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
 
-	_, err = MakeCircuit(qubit2d)
+	_, err = MakeCircuit(1, qubit)
 	if err != nil {
 		t.Fatalf(err.Error())
+	}
+}
+
+func TestMakeCircuitInvalid1Qubit2Size(t *testing.T) {
+	qubit, err := MakeQubit(1, 0)
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+
+	_, err = MakeCircuit(2, qubit)
+	if err == nil {
+		t.Fatalf("circuit should not have been created, but was")
 	}
 }
