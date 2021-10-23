@@ -1,6 +1,7 @@
 package quantum
 
 import (
+    "fmt"
     "math"
     "testing"
 )
@@ -38,4 +39,12 @@ func TestMakeQubitWithInvalidState(t *testing.T) {
     if err == nil {
         t.Fatalf("Successfully created qubit when it should have failed")
     }
+}
+
+func TestQubit_String(t *testing.T) {
+    qubit, err := MakeQubit(0.5, 0.5, 0.5, 0.5)
+    if err != nil {
+        t.Fatalf(err.Error())
+    }
+    fmt.Println(qubit.String())
 }

@@ -1,9 +1,11 @@
 package quantum
 
 import (
+    "bytes"
     "errors"
     "fmt"
     "math"
+    "strconv"
 )
 
 // Qubit is a representation of a quantum qubit.
@@ -32,4 +34,15 @@ func MakeQubit(states ...complex128) (Qubit, error) {
     }
 
     return qubit, nil
+}
+
+// String writes the provided Qubit as a string in Dirac notation.
+func (qubit Qubit) String() string {
+    var stateBuffer bytes.Buffer
+    binaryDigits := int(math.Sqrt(float64(len(qubit.states))))
+    for i, state := range qubit.states {
+        stateBuffer.WriteString(fmt.Sprintf("%v|%0*s> + ", state, binaryDigits, strconv.FormatInt(int64(i), 2)))
+    }
+    stateString := stateBuffer.String()
+    return stateString[:len(stateString) - 2]
 }
