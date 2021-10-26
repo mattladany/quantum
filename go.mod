@@ -1,3 +1,3 @@
-module github.com/mattladany/go-quantum
+module github.com/mattladany/quantum
 
 go 1.15

@@ -3,7 +3,6 @@ package quantum
 import (
 	"bytes"
 	"fmt"
-	"strconv"
 )
 
 // Circuit a quantum circuit that contains qubits and quantum gates.
@@ -42,8 +41,9 @@ func MakeSingleQubitCircuit(qubit *Qubit, gates ...[2][2]complex128) (*Circuit, 
 // String returns a string representation of the qubits, gates, and their interactions currently loaded in this circuit.
 func (circuit Circuit) String() string {
 	var buffer bytes.Buffer
-	buffer.WriteString(fmt.Sprintf("[%v|%0*s> + ", circuit.qubits[0].basis0, 1, strconv.FormatInt(int64(0), 2)))
-	buffer.WriteString(fmt.Sprintf("%v|%0*s>]---", circuit.qubits[0].basis1, 1, strconv.FormatInt(int64(1), 2)))
+    buffer.WriteString(circuit.qubits[0].String())
+	//buffer.WriteString(fmt.Sprintf("[%v|%0*s> + ", circuit.qubits[0].basis0, 1, strconv.FormatInt(int64(0), 2)))
+	//buffer.WriteString(fmt.Sprintf("%v|%0*s>]---", circuit.qubits[0].basis1, 1, strconv.FormatInt(int64(1), 2)))
 	// TODO write function to compare gate slices and return a string representation of the gate
 	//    for _, _ = range circuit.gates {
 	//        buffer.WriteString(fmt.Sprintf("%s---", "X"))

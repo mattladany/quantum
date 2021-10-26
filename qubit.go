@@ -57,6 +57,14 @@ func (qubit *Qubit) Update(basis0 complex128, basis1 complex128) error {
 	return nil
 }
 
+// String writes the provided Qubit as a string in Dirac-esque notation.
+func (qubit *Qubit) String() string {
+    var stateBuffer bytes.Buffer
+	stateBuffer.WriteString(fmt.Sprintf("%v|%0*s> + ", qubit.basis0, 1, strconv.FormatInt(int64(0), 2)))
+	stateBuffer.WriteString(fmt.Sprintf("%v|%0*s> + ", qubit.basis1, 1, strconv.FormatInt(int64(1), 2)))
+	return stateBuffer.String()
+}
+
 // checkIfUnitVector returns true if the sum of squared magnitutes of
 //  the parameters is 1, false otherwise.
 func checkIfUnitVector(basis0 complex128, basis1 complex128) bool {
@@ -98,7 +106,7 @@ func MakeTensoredQubits(states ...complex128) (*TensoredQubits, error) {
 	return tensoredQubits, nil
 }
 
-// String writes the provided TensoredQubits as a string in Dirac notation.
+// String writes the provided TensoredQubits as a string in Dirac-esque notation.
 func (tensoredQubits TensoredQubits) String() string {
 	var stateBuffer bytes.Buffer
 	binaryDigits := int(math.Sqrt(float64(len(tensoredQubits.states))))
