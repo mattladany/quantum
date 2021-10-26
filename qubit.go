@@ -17,14 +17,10 @@ type Qubit struct {
 // It returns a Qubit struct if the provided states represent a unit vector.
 // It returns an error if the provided states do not represent a unit vector.
 func MakeQubit(basis0 complex128, basis1 complex128) (*Qubit, error) {
-	var sum float64
 
-	// TODO Figure out why math.Abs is required for complex numbers...
-	sum = math.Abs(real(basis0*basis0) + real(basis1*basis1))
-
-	// Make sure the provided basis sates represent a unit vector
-	if sum-float64EqualityThreshold > 1.0 || sum+float64EqualityThreshold < 1.0 {
-		return nil, fmt.Errorf("a qubit must be a unit vector...sum was: %v", sum)
+	// Make sure the provided basis states represent a unit vector
+	if !checkIfUnitVector(basis0, basis1) {
+		return nil, fmt.Errorf("a qubit must be a unit vector")
 	}
 
 	qubit := new(Qubit)
@@ -48,6 +44,8 @@ func (qubit *Qubit) Basis1() complex128 {
 // Will return nil if the provided values make a unit vector.
 // Will return an error if the provided values do not make a unit vector.
 func (qubit *Qubit) Update(basis0 complex128, basis1 complex128) error {
+
+    // Make sure the provided basis states represent a unit vector
 	if !checkIfUnitVector(basis0, basis1) {
 		return fmt.Errorf("a qubit must be a unit vector")
 	}
@@ -67,9 +65,12 @@ func (qubit *Qubit) String() string {
 
 // checkIfUnitVector returns true if the sum of squared magnitutes of
 //  the parameters is 1, false otherwise.
-func checkIfUnitVector(basis0 complex128, basis1 complex128) bool {
-	// TODO Figure out why math.Abs is required for complex numbers...
-	sum := math.Abs(real(basis0*basis0) + real(basis1*basis1))
+func checkIfUnitVector(states ...complex128) bool {
+    var sum float64
+
+    for _, state := range states {
+        sum += math.Abs(real(state*state))
+    }
 
 	// Make sure the provided basis sates represent a unit vector
 	if sum-float64EqualityThreshold > 1.0 || sum+float64EqualityThreshold < 1.0 {
@@ -88,19 +89,10 @@ type TensoredQubits struct {
 // It returns an error if the provided states do not represent a unit vector.
 func MakeTensoredQubits(states ...complex128) (*TensoredQubits, error) {
 	tensoredQubits := new(TensoredQubits)
-	var sum float64
-
-	for _, state := range states {
-		tensoredQubits.states = append(tensoredQubits.states, state)
-		sum += real(state * state)
-	}
-
-	// TODO Figure out why math.Abs is required for complex numbers...
-	sum = math.Abs(sum)
 
 	// Make sure the states provided represent a unit vector
-	if sum-float64EqualityThreshold > 1.0 || sum+float64EqualityThreshold < 1.0 {
-		return nil, fmt.Errorf("a tensor product of qubits must be a unit vector...sum was: %v", sum)
+	if !checkIfUnitVector(states...) {
+		return nil, fmt.Errorf("a tensor product of qubits must be a unit vector")
 	}
 
 	return tensoredQubits, nil
