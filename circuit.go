@@ -41,7 +41,7 @@ func MakeSingleQubitCircuit(qubit *Qubit, gates ...[2][2]complex128) (*Circuit, 
 // String returns a string representation of the qubits, gates, and their interactions currently loaded in this circuit.
 func (circuit Circuit) String() string {
 	var buffer bytes.Buffer
-    buffer.WriteString(circuit.qubits[0].String())
+	buffer.WriteString(circuit.qubits[0].String())
 	//buffer.WriteString(fmt.Sprintf("[%v|%0*s> + ", circuit.qubits[0].basis0, 1, strconv.FormatInt(int64(0), 2)))
 	//buffer.WriteString(fmt.Sprintf("%v|%0*s>]---", circuit.qubits[0].basis1, 1, strconv.FormatInt(int64(1), 2)))
 	// TODO write function to compare gate slices and return a string representation of the gate
@@ -50,4 +50,13 @@ func (circuit Circuit) String() string {
 	//    }
 
 	return buffer.String()[:len(buffer.String())-3]
+}
+
+// applyGate applies the provided gate to the provided qubit.
+func applyGate(qubit *Qubit, gate [2][2]complex128) {
+	oldBasis0 := qubit.basis0
+	oldBasis1 := qubit.basis1
+
+	qubit.basis0 = gate[0][0]*oldBasis0 + gate[0][1]*oldBasis1
+	qubit.basis1 = gate[1][0]*oldBasis0 + gate[1][1]*oldBasis1
 }

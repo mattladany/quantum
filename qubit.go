@@ -45,7 +45,7 @@ func (qubit *Qubit) Basis1() complex128 {
 // Will return an error if the provided values do not make a unit vector.
 func (qubit *Qubit) Update(basis0 complex128, basis1 complex128) error {
 
-    // Make sure the provided basis states represent a unit vector
+	// Make sure the provided basis states represent a unit vector
 	if !checkIfUnitVector(basis0, basis1) {
 		return fmt.Errorf("a qubit must be a unit vector")
 	}
@@ -57,7 +57,7 @@ func (qubit *Qubit) Update(basis0 complex128, basis1 complex128) error {
 
 // String writes the provided Qubit as a string in Dirac-esque notation.
 func (qubit *Qubit) String() string {
-    var stateBuffer bytes.Buffer
+	var stateBuffer bytes.Buffer
 	stateBuffer.WriteString(fmt.Sprintf("%v|%0*s> + ", qubit.basis0, 1, strconv.FormatInt(int64(0), 2)))
 	stateBuffer.WriteString(fmt.Sprintf("%v|%0*s> + ", qubit.basis1, 1, strconv.FormatInt(int64(1), 2)))
 	return stateBuffer.String()
@@ -66,11 +66,11 @@ func (qubit *Qubit) String() string {
 // checkIfUnitVector returns true if the sum of squared magnitutes of
 //  the parameters is 1, false otherwise.
 func checkIfUnitVector(states ...complex128) bool {
-    var sum float64
+	var sum float64
 
-    for _, state := range states {
-        sum += math.Abs(real(state*state))
-    }
+	for _, state := range states {
+		sum += math.Abs(real(state * state))
+	}
 
 	// Make sure the provided basis sates represent a unit vector
 	if sum-float64EqualityThreshold > 1.0 || sum+float64EqualityThreshold < 1.0 {

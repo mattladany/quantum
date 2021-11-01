@@ -2,6 +2,7 @@ package quantum
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -42,4 +43,66 @@ func TestMakeSingleQubitCircuitWith1Gate(t *testing.T) {
 	}
 
 	fmt.Println(circuit)
+}
+
+func TestApplyGateX(t *testing.T) {
+	qubit, err1 := MakeQubit(1, 0)
+	if err1 != nil {
+		t.Fatalf(err1.Error())
+	}
+
+	x := MakeXGate()
+
+	applyGate(qubit, x)
+
+	if qubit.Basis0() != 0 || qubit.Basis1() != 1 {
+		t.Fatalf("X gate was not applied correctly")
+	}
+}
+
+func TestApplyGateY(t *testing.T) {
+	qubit, err1 := MakeQubit(1, 0)
+	if err1 != nil {
+		t.Fatalf(err1.Error())
+	}
+
+	y := MakeYGate()
+
+	applyGate(qubit, y)
+
+	if qubit.Basis0() != 0 || qubit.Basis1() != complex(0, -1) {
+		t.Fatalf("Y gate was not applied correctly")
+	}
+}
+
+func TestApplyGateZ(t *testing.T) {
+	qubit, err1 := MakeQubit(1, 0)
+	if err1 != nil {
+		t.Fatalf(err1.Error())
+	}
+
+	z := MakeZGate()
+
+	applyGate(qubit, z)
+
+	if qubit.Basis0() != 1 || qubit.Basis1() != 0 {
+		t.Fatalf("Z gate was not applied correctly")
+	}
+}
+
+func TestApplyGateHadamard(t *testing.T) {
+	qubit, err1 := MakeQubit(1, 0)
+	if err1 != nil {
+		t.Fatalf(err1.Error())
+	}
+
+	h := MakeHadamardGate()
+
+	applyGate(qubit, h)
+
+	fmt.Println(qubit)
+
+	if (real(qubit.Basis0())-1.0/math.Sqrt(2)) < (0-float64EqualityThreshold) || (real(qubit.Basis0())-1.0/math.Sqrt(2)) > (0+float64EqualityThreshold) || (real(qubit.Basis1())-1.0/math.Sqrt(2)) < (0-float64EqualityThreshold) || (real(qubit.Basis1())-1.0/math.Sqrt(2)) > (0+float64EqualityThreshold) {
+		t.Fatalf("H gate was not applied correctly")
+	}
 }
